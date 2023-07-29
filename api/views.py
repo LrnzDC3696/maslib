@@ -8,6 +8,6 @@ class ShowList(generics.ListCreateAPIView):
     serializer_class = ShowSerializer
 
 
-class ShowDetail(generics.ListCreateAPIView):
+class ShowDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Show.objects.all()
     serializer_class = ShowSerializer
