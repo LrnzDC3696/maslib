@@ -1,5 +1,7 @@
-# movies/models.py
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model()
 
 
 class BaseModel(models.Model):
@@ -80,3 +82,53 @@ class Show(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserShowList(models.Model):
+    STATUS_CHOICES = (
+        ("completed", "Completed"),
+        ("watching", "Watching"),
+        ("planning", "Planning"),
+        ("paused", "Paused"),
+        ("dropped", "Dropped"),
+    )
+
+    NOT_SCORED = None  # Use None to represent "not scored"
+    SCORE_CHOICES = [
+        (NOT_SCORED, "Not Scored"),
+        (1, "1 - Very Poor"),
+        (2, "2 - Poor"),
+        (3, "3 - Below Average"),
+        (4, "4 - Average"),
+        (5, "5 - Above Average"),
+        (6, "6 - Good"),
+        (7, "7 - Very Good"),
+        (8, "8 - Great"),
+        (9, "9 - Excellent"),
+        (10, "10 - Masterpiece"),
+    ]
+
+    user_id = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="show_list"
+    )
+    show_id = models.ForeignKey(Show, on_delete=models.CASCADE)
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="planning")
+    progress = models.PositiveIntegerField(default=0)
+    score = models.PositiveIntegerField(
+        null=True, blank=True, choices=SCORE_CHOICES, default=NOT_SCORED
+    )
+
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    start_date = models.DateField(null=True, blank=True)
+    complete_date = models.DateField(null=True, blank=True)
+
+    favorite = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("user_id", "show_id")
+
+    def __str__(self):
+        return f"{self.user.username}'s Show List: {self.show.title}"
