@@ -1,7 +1,5 @@
-from django.contrib.auth import get_user_model
 from django.db import models
-
-User = get_user_model()
+from django.conf import settings
 
 
 class BaseModel(models.Model):
@@ -109,7 +107,7 @@ class UserShowList(models.Model):
     ]
 
     user_id = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="show_list"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="show_list"
     )
     show_id = models.ForeignKey(Show, on_delete=models.CASCADE)
 
