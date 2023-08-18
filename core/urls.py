@@ -21,8 +21,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("base.urls", namespace="base")),
     path("api/v1/", include("api.urls", namespace="api-v1")),
-    path("api/auth/", include("rest_framework.urls")),
+    # path("api/auth/", include("rest_framework.urls")),
     path("api/user/", include("users.urls", namespace="users")),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    # path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
